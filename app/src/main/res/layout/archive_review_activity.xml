@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="20dp"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/revealTranslation_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Reveal Translation"
+        app:layout_constraintBottom_toTopOf="@id/removeWord_button"
+        app:layout_constraintTop_toBottomOf="@id/word" />
+
+    <LinearLayout
+        android:id="@+id/reveal_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/removeWord_button"
+        app:layout_constraintTop_toBottomOf="@id/word">
+
+        <TextView
+            android:id="@+id/translation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/explanation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/edit_panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/nextWord_button"
+        app:layout_constraintTop_toBottomOf="@id/word">
+
+        <TextView
+            android:id="@+id/translation_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Translation"
+            app:layout_constraintBottom_toTopOf="@id/translation_input"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/translation_input"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/explanation_label"
+            app:layout_constraintTop_toBottomOf="@id/translation_label"
+            app:layout_constraintVertical_weight="1"
+
+            />
+
+        <TextView
+            android:id="@+id/explanation_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Explanation"
+            app:layout_constraintBottom_toTopOf="@id/explanation_input"
+            app:layout_constraintTop_toBottomOf="@id/translation_input" />
+
+        <EditText
+            android:id="@+id/explanation_input"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/save_button"
+            app:layout_constraintTop_toBottomOf="@id/explanation_label"
+            app:layout_constraintVertical_weight="1" />
+
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/cancel_button"
+            app:layout_constraintTop_toBottomOf="@+id/explanation_input" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintLeft_toRightOf="@id/save_button"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/explanation_input" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        android:id="@+id/nextWord_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/removeWord_button" />
+
+    <Button
+        android:id="@+id/removeWord_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@id/nextWord_button"
+        app:layout_constraintRight_toLeftOf="@id/editWord_button" />
+
+    <Button
+        android:id="@+id/editWord_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintLeft_toRightOf="@+id/removeWord_button"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

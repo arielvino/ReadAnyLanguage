@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ReadLangs</string>
+    <string name="insert_word">Insert word</string>
+    <string name="title_activity_archive_review">ArchiveReviewActivity</string>
+</resources>
