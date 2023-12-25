@@ -8,13 +8,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.av.readinlangs.App
 import com.av.readlangs.learningArchive.WordItem
-import com.av.readlangs.ui.theme.ReadLangsTheme
+import java.security.SecureRandom
+import kotlin.math.abs
 
 class ArchiveReviewActivity : ComponentActivity() {
     private lateinit var wordView: TextView
@@ -32,7 +29,7 @@ class ArchiveReviewActivity : ComponentActivity() {
     private lateinit var cancelButton: Button
 
     private var words: List<WordItem>? = null
-    private var wordIndex: Int = 0
+    private var word: WordItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +41,9 @@ class ArchiveReviewActivity : ComponentActivity() {
         //reveal button:
         revealButton = findViewById(R.id.revealTranslation_button)
         revealButton.setOnClickListener {
-            if (words != null) {
-                if (wordIndex < words!!.size) {
-                    revealButton.visibility = View.GONE
-                    revealHolder.visibility = View.VISIBLE
-                }
+            if (word != null) {
+                revealButton.visibility = View.GONE
+                revealHolder.visibility = View.VISIBLE
             }
         }
 
@@ -64,13 +59,13 @@ class ArchiveReviewActivity : ComponentActivity() {
         //next button:
         nextWordButton = findViewById(R.id.nextWord_button)
         nextWordButton.setOnClickListener {
-            loadNextWord()
+            loadWord()
         }
 
         //remove button:
         removeWordButton = findViewById(R.id.removeWord_button)
         removeWordButton.setOnClickListener {
-            App.archive.deleteWord(words!![wordIndex].word)
+            App.archive.deleteWord(word!!.word)
             refreshWordsList()
             loadWord()
         }
@@ -81,8 +76,8 @@ class ArchiveReviewActivity : ComponentActivity() {
             editingPanel.visibility = View.VISIBLE
             revealHolder.visibility = View.GONE
             revealButton.visibility = View.GONE
-            translationInput.setText(words!![wordIndex].translation)
-            explanationInput.setText(words!![wordIndex].explanation)
+            translationInput.setText(word!!.translation)
+            explanationInput.setText(word!!.explanation)
         }
 
         //editing panel:
@@ -97,22 +92,22 @@ class ArchiveReviewActivity : ComponentActivity() {
         //save button:
         saveButton = findViewById(R.id.save_button)
         saveButton.setOnClickListener {
-                val translation = translationInput.text
-                //do nothing if the translation is empty:
-                if (translation.isBlank()) {
-                    return@setOnClickListener
-                }
+            val translation = translationInput.text
+            //do nothing if the translation is empty:
+            if (translation.isBlank()) {
+                return@setOnClickListener
+            }
 
-                var explanation: String? = explanationInput.text.toString()
-                //explanation might be null:
-                if (explanation!!.isBlank()) {
-                    explanation = null
-                }
+            var explanation: String? = explanationInput.text.toString()
+            //explanation might be null:
+            if (explanation!!.isBlank()) {
+                explanation = null
+            }
 
-                //save, refresh and move on:
-                App.archive.editWord(words!![wordIndex].word, translation.toString(), explanation)
-                refreshWordsList()
-                loadNextWord()
+            //save, refresh and move on:
+            App.archive.editWord(word!!.word, translation.toString(), explanation)
+            refreshWordsList()
+            loadWord()
         }
 
         //cancel button:
@@ -129,39 +124,32 @@ class ArchiveReviewActivity : ComponentActivity() {
         loadWord()
     }
 
-    private fun loadNextWord() {
-        wordIndex++
-        loadWord()
-    }
-
     private fun loadWord() {
         if (words != null) {
-            //if exceed the number of words - go back to the start:
-            if (words!!.lastIndex < wordIndex) {
-                wordIndex = 0
-            }
+            if (words!!.isNotEmpty()) {
+                word = words!![abs(SecureRandom().nextInt()) % words!!.size]
 
-            //if there are any words:
-            if (words!!.lastIndex >= wordIndex) {
                 revealButton.visibility = View.VISIBLE
                 revealHolder.visibility = View.GONE
                 editingPanel.visibility = View.GONE
-                wordView.text = words!![wordIndex].word
-                translationView.text = words!![wordIndex].translation
-                if (words!![wordIndex].explanation != null) {
-                    explanationView.text = words!![wordIndex].explanation
+                wordView.text = word!!.word
+                translationView.text = word!!.translation
+                if (word!!.explanation != null) {
+                    explanationView.text = word!!.explanation
+                } else {
+                    explanationView.text = ""
                 }
                 translationInput.setText("")
                 explanationInput.setText("")
             }
 
             //if there are no words:
-            else{
+            else {
                 finish()
             }
         }
         //there is a problem with loading the archive:
-        else{
+        else {
             Toast.makeText(this, "Error loading words.", Toast.LENGTH_SHORT).show()
             finish()
         }
@@ -169,22 +157,5 @@ class ArchiveReviewActivity : ComponentActivity() {
 
     private fun refreshWordsList() {
         words = App.archive.getWords()
-    }
-}
-
-
-@Composable
-fun Greeting2(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    ReadLangsTheme {
-        Greeting2("Android")
     }
 }
