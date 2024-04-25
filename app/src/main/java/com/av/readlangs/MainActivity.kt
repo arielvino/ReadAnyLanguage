@@ -4,11 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.av.readlangs.ui.theme.ReadLangsTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -29,21 +24,12 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, ArchiveReviewActivity::class.java)
             startActivity(intent)
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ReadLangsTheme {
-        Greeting("Android")
+        //settings button:
+        val settingsButton:Button = findViewById(R.id.settingsButton)
+        settingsButton.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -2,4 +2,6 @@
     <string name="app_name">ReadLangs</string>
     <string name="insert_word">Insert word</string>
     <string name="title_activity_archive_review">ArchiveReviewActivity</string>
+    <string name="reveal_translation">Reveal Translation</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

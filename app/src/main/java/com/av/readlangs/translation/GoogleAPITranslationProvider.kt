@@ -26,6 +26,8 @@ class GoogleAPITranslationProvider(private val apiKey: String) : ITranslationPro
                 // Set up the request
                 connection.requestMethod = "GET"
 
+
+
                 // Get the response code
                 val responseCode = connection.responseCode
 

@@ -7,22 +7,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.av.readinlangs.App
 import com.av.readinlangs.FileUtils
 import com.av.readinlangs.ITranslationProvider
 import com.av.readlangs.MyEditText.OnSelectionChangedListener
 import com.av.readlangs.learningArchive.WordItem
-import com.av.readlangs.ui.theme.ReadLangsTheme
 
 class ReadingActivity : ComponentActivity() {
     val forbiddenCharacters = "., \n\r\t=+\"\'«»(){}[]?!"
@@ -62,11 +51,20 @@ class ReadingActivity : ComponentActivity() {
         textBox.addOnSelectionChangedListener(object : OnSelectionChangedListener {
             override fun onSelectionChanged(selStart: Int, selEnd: Int) {
 
+                var start = textBox.selectionStart
+                var end = textBox.selectionEnd
+
+                if (start > end) {
+                    val temp = start
+                    start = end
+                    end = temp
+                }
+
                 //get the word you need to translate:
                 word = detectWord(
                     textBox.text.toString(),
-                    textBox.selectionStart,
-                    textBox.selectionEnd
+                    start,
+                    end
                 )
 
                 //translate:
@@ -99,14 +97,22 @@ class ReadingActivity : ComponentActivity() {
 
         //insertWord button:
         val insertWordButton: Button = findViewById(R.id.insertWord_button)
-        insertWordButton.setOnClickListener(View.OnClickListener
-        {
+        insertWordButton.setOnClickListener {
             if (word.isNotBlank() && result.text.toString().isNotBlank()) {
 
                 //save the result to archive:
                 App.archive.saveWord(WordItem(word, result.text.toString()))
+
+                //insert translation into the text:
+                //todo: warning: is the direction of the '(' and ')' depending on the rtl direction of the source language?
+                val (_, end) = detectWordBorders(
+                    textBox.text.toString(),
+                    textBox.selectionStart,
+                    textBox.selectionEnd
+                )
+                val newText = textBox.text.insert(end, "(" + result.text.toString() + ")")
             }
-        })
+        }
 
         //load text and scroll value from cash after the activity is fully initialized:
         result.text = ""
@@ -129,8 +135,20 @@ class ReadingActivity : ComponentActivity() {
     }
 
     fun detectWord(text: String, selStart: Int, selEnd: Int): String {
-        var start: Int = selStart
-        var end: Int = selEnd
+        val (start, end) = detectWordBorders(text, selStart, selEnd)
+
+        //the reason for this conditioning is that if the end-selector is at the end of the text - running substring(start, end) throw IndexOutOfBorderException:
+        var word = text.substring(start)
+        if (end < text.length) {
+            word = text.substring(start, end)
+        }
+
+        return word
+    }
+
+    private fun detectWordBorders(text: String, selStart: Int, selEnd: Int): Pair<Int, Int> {
+        var start = selStart
+        var end = selEnd
 
         //track the start of the word:
         while (start > 0) {
@@ -150,28 +168,6 @@ class ReadingActivity : ComponentActivity() {
             }
         }
 
-        //the reason for this conditioning is that if the end-selector is at the end of the text - running substring(start, end) throw IndexOutOfBorderException:
-        var word = text.substring(start)
-        if (end < text.length) {
-            word = text.substring(start, end)
-        }
-
-        return word
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    ReadLangsTheme {
-        Column {
-            Button(modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { /*TODO*/ }) {
-                Text(text = "Insert Word")
-            }
-            TextField(modifier = Modifier.fillMaxSize(), value = "lll", onValueChange = {})
-            Text(text = "hhhh")
-        }
+        return Pair(start, end)
     }
 }

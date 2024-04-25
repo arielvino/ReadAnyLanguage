@@ -16,6 +16,11 @@
         android:theme="@style/Theme.ReadLangs"
         tools:targetApi="31">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.ReadLangs" />
+        <activity
             android:name=".ArchiveReviewActivity"
             android:exported="false"
             android:label="@string/title_activity_archive_review"

@@ -7,10 +7,9 @@ class CashMemoryTranslationProvider : ITranslationProvider {
         File(cashDirPath).mkdir()
     }
 
-    companion object{
+    companion object {
         val separator = "="
         val cashDirPath = App.appContext.cacheDir.absolutePath + "/" + "translated_cash"
-
     }
 
     override fun requestTranslation(word: String) {

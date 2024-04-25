@@ -150,7 +150,7 @@ class ArchiveReviewActivity : ComponentActivity() {
         }
         //there is a problem with loading the archive:
         else {
-            Toast.makeText(this, "Error loading words.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No words found for these languages.", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
