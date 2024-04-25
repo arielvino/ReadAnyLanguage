@@ -3,8 +3,8 @@ package com.av.readlangs
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.Button
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.av.readinlangs.App
@@ -20,6 +20,7 @@ class ReadingActivity : ComponentActivity() {
 
     lateinit var result: TextView
     lateinit var textBox: MyEditText
+    lateinit var scrollView: ScrollView
 
     var word: String = ""
 
@@ -88,7 +89,8 @@ class ReadingActivity : ComponentActivity() {
         })
 
         //on scroll changed:
-        textBox.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+        scrollView = findViewById(R.id.scrollView)
+        scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             FileUtils.writeFile(
                 scrollFilePath,
                 scrollY.toString()
@@ -128,7 +130,7 @@ class ReadingActivity : ComponentActivity() {
             val scroll = FileUtils.readFile(scrollFilePath)
             if (scroll != null) {
                 if (scroll.toIntOrNull() != null) {
-                    textBox.scrollY = scroll.toInt()
+                    scrollView.scrollY = scroll.toInt()
                 }
             }
         }
