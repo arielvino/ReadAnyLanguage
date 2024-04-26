@@ -6,8 +6,9 @@ import org.json.JSONObject
 import java.io.File
 
 object JsonLearningArchive : ILearningArchive {
-    private val archiveFilePath =
-        App.appContext.filesDir.absolutePath + "/" + "Archives" + "/" + App.sourceLanguage + "-" + App.targetLanguage + ".json"
+    private fun archiveFilePath() :String {
+        return App.appContext.filesDir.absolutePath + "/" + "Archives" + "/" + App.sourceLanguage + "-" + App.targetLanguage + ".json"
+    }
 
     override fun saveWord(wordItem: WordItem) {
         val list = getWords()
@@ -66,13 +67,13 @@ object JsonLearningArchive : ILearningArchive {
         }
 
         // Save JSON to a file:
-        val file = File(archiveFilePath)
+        val file = File(archiveFilePath())
         file.parentFile.mkdirs()
         file.writeText(jsonArray.toString())
     }
 
     private fun retrieveListFromJson(): List<WordItem>? {
-        val file = File(archiveFilePath)
+        val file = File(archiveFilePath())
 
         if (!file.exists()) {
             return null

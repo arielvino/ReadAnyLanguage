@@ -1,9 +1,9 @@
 package com.av.readinlangs
 
-class HybridCashGoogleAPITranslationProvider(val apiKey: String) : ITranslationProvider {
+class HybridCashGoogleAPITranslationProvider() : ITranslationProvider {
 
     val cashTranslator = CashMemoryTranslationProvider()
-    val googleAPITranslator = GoogleAPITranslationProvider(apiKey)
+    val googleAPITranslator = GoogleAPITranslationProvider()
 
     init {
         //when cash provider callback:

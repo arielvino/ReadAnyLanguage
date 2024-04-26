@@ -1,5 +1,6 @@
 package com.av.readinlangs
 
+import com.av.readlangs.GoogleApiKey
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -7,7 +8,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class GoogleAPITranslationProvider(private val apiKey: String) : ITranslationProvider {
+class GoogleAPITranslationProvider() : ITranslationProvider {
 
     override fun requestTranslation(word: String) {
         Thread {
@@ -17,7 +18,7 @@ class GoogleAPITranslationProvider(private val apiKey: String) : ITranslationPro
 
             //build the query:
             val query =
-                googleURL + "key=" + apiKey + "&source=" + App.sourceLanguage + "&target=" + App.targetLanguage + "&q=" + word
+                googleURL + "key=" + GoogleApiKey.key + "&source=" + App.sourceLanguage + "&target=" + App.targetLanguage + "&q=" + word
 
             val url = URL(query)
             val connection = url.openConnection() as HttpURLConnection

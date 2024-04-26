@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.av.readinlangs.App
 import com.av.readlangs.supportedLanguages.LanguageItem
@@ -20,8 +23,16 @@ class SettingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
 
+        //Google api key change:
+        val apiKeyInput = findViewById<EditText>(R.id.api_key_input)
+        val saveKeyButton = findViewById<Button>(R.id.save_key_button)
+        saveKeyButton.setOnClickListener {
+            GoogleApiKey.key = apiKeyInput.text.toString()
+            apiKeyInput.setText("")
+            Toast.makeText(this, "Key saved.", Toast.LENGTH_SHORT).show()
+        }
 
-
+        //Spinner for choosing source and target languages:
         val adapter = LanguageAdapter(this, android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
@@ -33,7 +44,6 @@ class SettingsActivity : ComponentActivity() {
         targetSpinner.adapter = adapter
         targetSpinner.setSelection(getLanguageId(App.targetLanguage))
 
-        // Set any listeners if needed for sourceSpinner
         sourceSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -51,7 +61,6 @@ class SettingsActivity : ComponentActivity() {
             }
         }
 
-        // Set any listeners if needed for targetSpinner
         targetSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
