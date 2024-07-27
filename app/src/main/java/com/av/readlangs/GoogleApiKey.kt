@@ -2,7 +2,6 @@ package com.av.readlangs
 
 import com.av.readinlangs.App
 import com.av.readinlangs.FileUtils
-import com.av.readinlangs.HybridCashGoogleAPITranslationProvider
 import java.io.File
 
 object GoogleApiKey {

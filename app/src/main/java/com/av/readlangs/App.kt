@@ -2,7 +2,6 @@ package com.av.readinlangs
 
 import android.app.Application
 import android.content.Context
-import com.av.readlangs.GoogleApiKey
 import com.av.readlangs.learningArchive.ILearningArchive
 import com.av.readlangs.learningArchive.JsonLearningArchive
 import com.av.readlangs.supportedLanguages.ISupportedLanguagesList
@@ -54,7 +53,7 @@ class App : Application() {
         super.onCreate()
         appContext = this
 
-        translator = HybridCashGoogleAPITranslationProvider()
+        translator = HybridCacheGoogleAPITranslationProvider()
 
         archive = JsonLearningArchive
         supportedLanguagesProvider = LanguagesList

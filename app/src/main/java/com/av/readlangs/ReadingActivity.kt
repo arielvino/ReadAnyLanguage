@@ -116,7 +116,7 @@ class ReadingActivity : ComponentActivity() {
             }
         }
 
-        //load text and scroll value from cash after the activity is fully initialized:
+        //load text and scroll value from cache after the activity is fully initialized:
         result.text = ""
 
         //load text:

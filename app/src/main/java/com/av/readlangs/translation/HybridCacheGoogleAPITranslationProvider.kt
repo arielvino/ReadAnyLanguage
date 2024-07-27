@@ -1,17 +1,17 @@
 package com.av.readinlangs
 
-class HybridCashGoogleAPITranslationProvider() : ITranslationProvider {
+class HybridCacheGoogleAPITranslationProvider() : ITranslationProvider {
 
-    val cashTranslator = CashMemoryTranslationProvider()
+    val cacheTranslator = CacheMemoryTranslationProvider()
     val googleAPITranslator = GoogleAPITranslationProvider()
 
     init {
-        //when cash provider callback:
-        cashTranslator.registerForTranslationReceiving(object :
+        //when cache provider callback:
+        cacheTranslator.registerForTranslationReceiving(object :
             ITranslationProvider.OnTranslationReceived {
             override fun onTranslationReceived(origin: String, translation: String?) {
 
-                //if translation isn't exist in cash - call googleAPI:
+                //if translation isn't exist in cache - call googleAPI:
                 if (translation == null) {
                     googleAPITranslator.requestTranslation(origin)
                 }
@@ -29,9 +29,9 @@ class HybridCashGoogleAPITranslationProvider() : ITranslationProvider {
         googleAPITranslator.registerForTranslationReceiving(object :
             ITranslationProvider.OnTranslationReceived {
             override fun onTranslationReceived(origin: String, translation: String?) {
-                //save translation to cash memory:
+                //save translation to cache memory:
                 if (translation != null) {
-                    cashTranslator.saveTranslationToCash(origin, translation)
+                    cacheTranslator.saveTranslationToCache(origin, translation)
                 }
 
                 //forward the result:
@@ -44,7 +44,7 @@ class HybridCashGoogleAPITranslationProvider() : ITranslationProvider {
 
     val receivers = mutableListOf<ITranslationProvider.OnTranslationReceived>()
     override fun requestTranslation(word: String) {
-        cashTranslator.requestTranslation(word)
+        cacheTranslator.requestTranslation(word)
     }
 
     override fun registerForTranslationReceiving(receiver: ITranslationProvider.OnTranslationReceived) {
