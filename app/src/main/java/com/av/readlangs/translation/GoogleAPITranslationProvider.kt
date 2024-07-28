@@ -4,6 +4,7 @@ import com.av.readlangs.GoogleApiKey
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -27,8 +28,6 @@ class GoogleAPITranslationProvider() : ITranslationProvider {
                 // Set up the request
                 connection.requestMethod = "GET"
 
-
-
                 // Get the response code
                 val responseCode = connection.responseCode
 
@@ -44,7 +43,6 @@ class GoogleAPITranslationProvider() : ITranslationProvider {
 
                     reader.close()
 
-
                     //retrieve the translation from the result:
 
                     try {
@@ -58,6 +56,9 @@ class GoogleAPITranslationProvider() : ITranslationProvider {
                 } else {
                     println("Error: ${connection.responseMessage}")
                 }
+            }
+            catch (e:IOException){
+                e.printStackTrace()
             } finally {
                 connection.disconnect()
 

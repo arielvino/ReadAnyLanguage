@@ -12,15 +12,16 @@ import com.av.readinlangs.FileUtils
 import com.av.readinlangs.ITranslationProvider
 import com.av.readlangs.MyEditText.OnSelectionChangedListener
 import com.av.readlangs.learningArchive.WordItem
+import kotlin.concurrent.thread
 
 class ReadingActivity : ComponentActivity() {
-    val forbiddenCharacters = "., \n\r\t=+\"\'«»(){}[]?!"
+    private val forbiddenCharacters = "., \n\r\t=+\"\'«»(){}[]?!"
     val contentFilePath = App.appContext.cacheDir.absolutePath + "/" + "content_save"
-    val scrollFilePath = App.appContext.cacheDir.absolutePath + "/" + "scroll_save"
+    private val scrollFilePath = App.appContext.cacheDir.absolutePath + "/" + "scroll_save"
 
     lateinit var result: TextView
     lateinit var textBox: MyEditText
-    lateinit var scrollView: ScrollView
+    private lateinit var scrollView: ScrollView
 
     var word: String = ""
 
@@ -63,9 +64,7 @@ class ReadingActivity : ComponentActivity() {
 
                 //get the word you need to translate:
                 word = detectWord(
-                    textBox.text.toString(),
-                    start,
-                    end
+                    textBox.text.toString(), start, end
                 )
 
                 //translate:
@@ -92,8 +91,7 @@ class ReadingActivity : ComponentActivity() {
         scrollView = findViewById(R.id.scrollView)
         scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             FileUtils.writeFile(
-                scrollFilePath,
-                scrollY.toString()
+                scrollFilePath, scrollY.toString()
             )
         }
 
@@ -108,11 +106,9 @@ class ReadingActivity : ComponentActivity() {
                 //insert translation into the text:
                 //todo: warning: is the direction of the '(' and ')' depending on the rtl direction of the source language?
                 val (_, end) = detectWordBorders(
-                    textBox.text.toString(),
-                    textBox.selectionStart,
-                    textBox.selectionEnd
+                    textBox.text.toString(), textBox.selectionStart, textBox.selectionEnd
                 )
-                val newText = textBox.text.insert(end, "(" + result.text.toString() + ")")
+                textBox.text.insert(end, "(" + result.text.toString() + ")")
             }
         }
 
