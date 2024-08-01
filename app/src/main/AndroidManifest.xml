@@ -16,17 +16,27 @@
         android:theme="@style/Theme.ReadLangs"
         tools:targetApi="31">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.CreateTabActivity"
+            android:exported="false"
+            android:label="@string/title_activity_create_tab"
+            android:theme="@style/Theme.ReadLangs" />
+        <activity
+            android:name=".ui.TabListActivity"
+            android:exported="false"
+            android:label="@string/title_activity_tab_list"
+            android:theme="@style/Theme.ReadLangs" />
+        <activity
+            android:name=".ui.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings"
             android:theme="@style/Theme.ReadLangs" />
         <activity
-            android:name=".ArchiveReviewActivity"
+            android:name=".ui.ArchiveReviewActivity"
             android:exported="false"
             android:label="@string/title_activity_archive_review"
             android:theme="@style/Theme.ReadLangs" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ReadLangs">
@@ -37,10 +47,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReadingActivity"
+            android:name=".ui.ReadingActivity"
             android:theme="@style/Theme.ReadLangs"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
-            />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
     </application>
 
 </manifest>

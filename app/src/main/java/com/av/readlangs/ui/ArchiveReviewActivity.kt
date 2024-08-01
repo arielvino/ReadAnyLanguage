@@ -1,5 +1,6 @@
-package com.av.readlangs
+package com.av.readlangs.ui
 
+import com.av.readlangs.R
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup

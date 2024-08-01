@@ -30,7 +30,7 @@
         android:fadeScrollbars="false"
         >
 
-        <com.av.readlangs.MyEditText
+        <com.av.readlangs.ui.MyEditText
             android:id="@+id/textbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

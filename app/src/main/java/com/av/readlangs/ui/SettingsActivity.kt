@@ -1,6 +1,5 @@
-package com.av.readlangs
+package com.av.readlangs.ui
 
-import android.R.string
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -14,6 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.av.readinlangs.App
+import com.av.readlangs.GoogleApiKey
+import com.av.readlangs.R
 import com.av.readlangs.supportedLanguages.LanguageItem
 
 class SettingsActivity : ComponentActivity() {
