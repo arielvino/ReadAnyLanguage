@@ -1,9 +1,10 @@
-package com.av.readlangs
+package com.av.readlangs.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
+import com.av.readlangs.R
 
 class MainActivity : ComponentActivity() {
 
@@ -14,7 +15,7 @@ class MainActivity : ComponentActivity() {
         //read button:
         val readButton: Button = findViewById(R.id.readButton)
         readButton.setOnClickListener {
-            val intent = Intent(this, ReadingActivity::class.java)
+            val intent = Intent(this, TabListActivity::class.java)
             startActivity(intent)
         }
 

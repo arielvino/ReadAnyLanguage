@@ -1,4 +1,4 @@
-package com.av.readlangs
+package com.av.readlangs.ui
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,40 +10,49 @@ import androidx.activity.ComponentActivity
 import com.av.readinlangs.App
 import com.av.readinlangs.FileUtils
 import com.av.readinlangs.ITranslationProvider
-import com.av.readlangs.MyEditText.OnSelectionChangedListener
+import com.av.readlangs.R
+import com.av.readlangs.ReadingTab
+import com.av.readlangs.ui.MyEditText.OnSelectionChangedListener
 import com.av.readlangs.learningArchive.WordItem
-import kotlin.concurrent.thread
 
 class ReadingActivity : ComponentActivity() {
-    private val forbiddenCharacters = "., \n\r\t=+\"\'«»(){}[]?!"
-    val contentFilePath = App.appContext.cacheDir.absolutePath + "/" + "content_save"
-    private val scrollFilePath = App.appContext.cacheDir.absolutePath + "/" + "scroll_save"
+    companion object {
+        private val forbiddenCharacters = "., \n\r\t=+\"\'«»(){}[]?!"
+        val TAB_NAME_KEY = "TAB_NAME"
 
-    lateinit var result: TextView
+    }
+
+    lateinit var resultView: TextView
     lateinit var textBox: MyEditText
     private lateinit var scrollView: ScrollView
 
     var word: String = ""
+    lateinit var tab: ReadingTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reading_activity)
+
+        tab = ReadingTab(intent.getStringExtra(TAB_NAME_KEY)!!)
+        App.sourceLanguage = tab.sourceLanguage
+        App.targetLanguage = tab.targetLanguage
+
         App.translator.registerForTranslationReceiving(object :
             ITranslationProvider.OnTranslationReceived {
             override fun onTranslationReceived(origin: String, translation: String?) {
                 //show the result to the user:
                 runOnUiThread {
                     if (translation == null) {
-                        result.text = ""
+                        resultView.text = ""
                     } else {
-                        result.text = translation
+                        resultView.text = translation
                     }
                 }
             }
         })
 
         //result panel:
-        result = findViewById(R.id.result)
+        resultView = findViewById(R.id.result)
 
         //textBox:
         textBox = findViewById(R.id.textbox)
@@ -52,6 +61,7 @@ class ReadingActivity : ComponentActivity() {
         //on selection changed:
         textBox.addOnSelectionChangedListener(object : OnSelectionChangedListener {
             override fun onSelectionChanged(selStart: Int, selEnd: Int) {
+                resultView.text = ""
 
                 var start = textBox.selectionStart
                 var end = textBox.selectionEnd
@@ -83,54 +93,42 @@ class ReadingActivity : ComponentActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                FileUtils.writeFile(contentFilePath, s.toString())
+                tab.text = s.toString()
             }
         })
 
         //on scroll changed:
         scrollView = findViewById(R.id.scrollView)
         scrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            FileUtils.writeFile(
-                scrollFilePath, scrollY.toString()
-            )
+            tab.scroll = scrollY
         }
 
         //insertWord button:
         val insertWordButton: Button = findViewById(R.id.insertWord_button)
         insertWordButton.setOnClickListener {
-            if (word.isNotBlank() && result.text.toString().isNotBlank()) {
+            if (word.isNotBlank() && resultView.text.toString().isNotBlank()) {
 
                 //save the result to archive:
-                App.archive.saveWord(WordItem(word, result.text.toString()))
+                App.archive.saveWord(WordItem(word, resultView.text.toString()))
 
                 //insert translation into the text:
                 //todo: warning: is the direction of the '(' and ')' depending on the rtl direction of the source language?
                 val (_, end) = detectWordBorders(
                     textBox.text.toString(), textBox.selectionStart, textBox.selectionEnd
                 )
-                textBox.text.insert(end, "(" + result.text.toString() + ")")
+                textBox.text.insert(end, "(" + resultView.text.toString() + ")")
             }
         }
 
-        //load text and scroll value from cache after the activity is fully initialized:
-        result.text = ""
-
         //load text:
-        val content = FileUtils.readFile(contentFilePath)
-        if (content != null) {
-            textBox.setText(content)
-        }
+        textBox.setText(tab.text)
 
         //load scroll:
         textBox.post {
-            val scroll = FileUtils.readFile(scrollFilePath)
-            if (scroll != null) {
-                if (scroll.toIntOrNull() != null) {
-                    scrollView.scrollY = scroll.toInt()
-                }
-            }
+            scrollView.scrollY = tab.scroll
         }
     }
+
 
     fun detectWord(text: String, selStart: Int, selEnd: Int): String {
         val (start, end) = detectWordBorders(text, selStart, selEnd)

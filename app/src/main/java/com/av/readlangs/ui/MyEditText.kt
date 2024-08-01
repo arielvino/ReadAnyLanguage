@@ -1,4 +1,4 @@
-package com.av.readlangs
+package com.av.readlangs.ui
 
 import android.content.Context
 import android.util.AttributeSet
